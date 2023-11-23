@@ -122,6 +122,22 @@ class PdfLoader:
 
         return pages
 
+    def extract_bytes_area(self, marginl: int=0, marginr: int = 0,margint: int=0,marginb: int=0) -> Optional[npt.NDArray[Any]]:
+        #def extract_bytes_area(self) -> List[bytes]:
+        """Extract encoded text from the pdf
+
+        Returns
+        -------
+        List[bytes]
+            The text of each page
+        """
+        print("extract_bytes_area:",marginl,marginr,margint,marginb)
+        pages: List[bytes] = []
+        if self.capsule is not None:
+            pages = cXpdfPython.extractTextArea(self.capsule,marginl,marginr,margint,marginb)
+
+        return pages
+
     def extract_strings(self) -> List[str]:
         """Extract and decode text from the pdf
 
@@ -131,6 +147,20 @@ class PdfLoader:
             The text of each page, decoded as unicode
         """
         pages = self.extract_bytes()
+        return [page.decode("unicode_escape", "replace") for page in pages]
+
+    #def extract_strings_area(self) -> List[str]:
+    def extract_strings_area(self, marginl: int=0, marginr: int = 0,margint: int=0,marginb: int=0) -> Optional[npt.NDArray[Any]]:
+        """Extract and decode text from the pdf
+
+        Returns
+        -------
+        List[str]
+            The text of each page, decoded as unicode
+        """
+        print("extract_strings_area:",marginl,marginr,margint,marginb)
+
+        pages = self.extract_bytes_area(marginl,marginr,margint,marginb)
         return [page.decode("unicode_escape", "replace") for page in pages]
 
     def extract_page_info(self) -> List[PageInfo]:

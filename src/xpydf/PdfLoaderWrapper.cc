@@ -99,6 +99,22 @@ PyObject *construct(PyObject *self, PyObject *args) {
     return loaderCapsule;
 }
 
+PyObject *extractTextArea(PyObject *self, PyObject *args) {
+    vector<string> res;
+    
+    PyObject *loaderCapsule;
+    int marginl,marginr,margint,marginb;
+    
+    PyArg_ParseTuple(args, "Oiiii", &loaderCapsule, &marginl, &marginr, &margint, &marginb);
+    printf("margins: %d,%d,%d,%d",marginl,marginr,margint,marginb);
+
+    PdfLoader *loader = (PdfLoader *)PyCapsule_GetPointer(loaderCapsule, "loaderPtr");
+    vector<string> result = loader->extractTextArea(marginl,marginr,margint,marginb);
+    
+    PyObject *converted = vectorStringToList(result);
+    return Py_BuildValue("O", converted);
+}
+
 PyObject *extractText(PyObject *self, PyObject *args) {
     vector<string> res;
     
@@ -209,6 +225,10 @@ PyMethodDef cXpdfPythonFunctions[] = {
     {"extractText",
       extractText, METH_VARARGS,
      "Extract text as bytes"},
+
+    {"extractTextArea",
+      extractTextArea, METH_VARARGS,
+     "Extract text as bytes within rectangular area"},
     
     {"extractPageInfo",
       extractPageInfo, METH_VARARGS,

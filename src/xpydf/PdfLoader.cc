@@ -101,6 +101,44 @@ PdfLoader::~PdfLoader() {
   gMemReport(stderr);
 }
 
+std::vector<std::string> PdfLoader::extractTextArea(int marginl,int marginr,int margint,int marginb) {
+  TextOutputDev *textOut;
+  std::stringstream *stream = new std::stringstream();
+  std::vector<std::string> pages;
+  int firstPage, lastPage;
+
+  if (!doc->isOk()) {
+    goto err;
+  }
+
+  firstPage = 1;
+  lastPage = doc->getNumPages();
+
+  textOutControl.marginLeft = marginl;
+  textOutControl.marginRight = marginr;
+  textOutControl.marginTop = margint;
+  textOutControl.marginBottom = marginb;
+  
+  textOut = new TextOutputDev(&outputToStringStream, stream, &textOutControl);
+
+  if (textOut->isOk()) {
+    for (int page = firstPage; page <= lastPage; page++) {
+      stream->str("");
+      doc->displayPages(textOut, page, page, 72, 72, 0, gFalse, gTrue, gFalse);
+      pages.push_back(stream->str());
+    }
+  } 
+
+  delete textOut;
+err:
+  delete stream;
+
+  Object::memCheck(stderr);
+  gMemReport(stderr);
+
+  return pages;
+}
+
 std::vector<std::string> PdfLoader::extractText() {
   TextOutputDev *textOut;
   std::stringstream *stream = new std::stringstream();
