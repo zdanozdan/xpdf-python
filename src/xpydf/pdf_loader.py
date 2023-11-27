@@ -131,7 +131,6 @@ class PdfLoader:
         List[bytes]
             The text of each page
         """
-        print("extract_bytes_area:",marginl,marginr,margint,marginb)
         pages: List[bytes] = []
         if self.capsule is not None:
             pages = cXpdfPython.extractTextArea(self.capsule,marginl,marginr,margint,marginb)
@@ -147,7 +146,8 @@ class PdfLoader:
             The text of each page, decoded as unicode
         """
         pages = self.extract_bytes()
-        return [page.decode("unicode_escape", "replace") for page in pages]
+        return [page for page in pages]
+        #return [page.decode("unicode_escape", "replace") for page in pages]
 
     #def extract_strings_area(self) -> List[str]:
     def extract_strings_area(self, marginl: int=0, marginr: int = 0,margint: int=0,marginb: int=0) -> Optional[npt.NDArray[Any]]:
@@ -158,10 +158,10 @@ class PdfLoader:
         List[str]
             The text of each page, decoded as unicode
         """
-        print("extract_strings_area:",marginl,marginr,margint,marginb)
 
         pages = self.extract_bytes_area(marginl,marginr,margint,marginb)
-        return [page.decode("unicode_escape", "replace") for page in pages]
+        return [page for page in pages]
+        #return [page.decode("unicode_escape", "replace") for page in pages]
 
     def extract_page_info(self) -> List[PageInfo]:
         """Return image related metadata from the pdf
