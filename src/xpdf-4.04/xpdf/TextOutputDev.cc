@@ -1662,8 +1662,8 @@ void TextPage::write(void *outputStream, TextOutputFunc outputFunc) {
   // get the output encoding
   if (!(uMap = globalParams->getTextEncoding())) {
     return;
-  }
-  spaceLen = uMap->mapUnicode(0x20, space, sizeof(space));
+  }  
+  spaceLen = uMap->mapUnicode(0x2B, space, sizeof(space));
   eolLen = 0; // make gcc happy
   switch (globalParams->getTextEOL()) {
   case eolUnix:
