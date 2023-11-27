@@ -50,6 +50,10 @@ PdfLoader::PdfLoader(LoaderConfig config, char *fileName, char *ownerPw, char *u
   globalParams->setMapUnknownCharNames(config.mapUnknownCharNames);
   globalParams->setupBaseFonts(NULL);
 
+  //Force encoding for UTF-8
+  const char textEncName[] = "UTF-8";
+  globalParams->setTextEncoding(textEncName);
+
   switch (config.mode) {
     default:
     case 0:
