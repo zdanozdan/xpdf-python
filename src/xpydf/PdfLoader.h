@@ -23,8 +23,6 @@ typedef struct LoaderConfig {
   GBool mapNumericCharNames = gFalse;
   GBool mapUnknownCharNames = gTrue;
   unsigned int mode = 0;
-  unsigned int firstPage = 1;
-  unsigned int lastPage = 0;
 } LoaderConfig;
 
 typedef struct PageImageInfo {
@@ -37,7 +35,7 @@ class PdfLoader {
 public:
     PdfLoader(LoaderConfig config, char *fileName, char *ownerPw = NULL, char *userPw = NULL);
     ~PdfLoader();
-    std::vector<std::string> extractText(int firstPage=1,int lastPage=0);
+    std::vector<std::string> extractText(int firstPage=1,int lastPage=0,double fixedPitch=0);
     std::vector<std::string> extractTextArea(int marginl = NULL,int marginr = NULL,int margint = NULL,int marginb=NULL);
     std::vector<PageImageInfo> extractPageInfo();
     std::vector<Image> extractImages(int pageNum);

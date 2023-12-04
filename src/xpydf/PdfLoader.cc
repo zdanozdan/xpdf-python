@@ -74,7 +74,7 @@ PdfLoader::PdfLoader(LoaderConfig config, char *fileName, char *ownerPw, char *u
   textOutControl.discardDiagonalText = config.discardDiag;
   textOutControl.discardRotatedText = config.discardRotatedText;
   textOutControl.insertBOM = config.insertBOM;
-  textOutControl.fixedPitch = 1;
+  //textOutControl.fixedPitch = 1;
 
   textFileName = new GString(fileName);
 
@@ -144,7 +144,7 @@ err:
   return pages;
 }
 
-std::vector<std::string> PdfLoader::extractText(int firstPage,int lastPage) {
+std::vector<std::string> PdfLoader::extractText(int firstPage,int lastPage,double fixedPitch) {
   TextOutputDev *textOut;
   std::stringstream *stream = new std::stringstream();
   std::vector<std::string> pages;
@@ -152,6 +152,10 @@ std::vector<std::string> PdfLoader::extractText(int firstPage,int lastPage) {
 
   if (!doc->isOk()) {
     goto err;
+  }
+
+  if(fixedPitch > 0) {
+    textOutControl.fixedPitch = fixedPitch;
   }
 
   // get page range
@@ -162,9 +166,6 @@ std::vector<std::string> PdfLoader::extractText(int firstPage,int lastPage) {
     lastPage = doc->getNumPages();
   }
 
-  //firstPage = 1;
-  //lastPage = doc->getNumPages();
-  
   textOut = new TextOutputDev(&outputToStringStream, stream, &textOutControl);
 
   if (textOut->isOk()) {

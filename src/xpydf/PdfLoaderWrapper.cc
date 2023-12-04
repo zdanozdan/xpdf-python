@@ -119,10 +119,12 @@ PyObject *extractText(PyObject *self, PyObject *args) {
     
     PyObject *loaderCapsule;
     int firstPage,lastPage;
-    PyArg_ParseTuple(args, "Oii", &loaderCapsule,&firstPage,&lastPage);
+    double fixedPitch;
+    
+    PyArg_ParseTuple(args, "Oiid", &loaderCapsule,&firstPage,&lastPage,&fixedPitch);
 
     PdfLoader *loader = (PdfLoader *)PyCapsule_GetPointer(loaderCapsule, "loaderPtr");
-    vector<string> result = loader->extractText(firstPage,lastPage);
+    vector<string> result = loader->extractText(firstPage,lastPage,fixedPitch);
     
     PyObject *converted = vectorStringToList(result);
     return Py_BuildValue("O", converted);
