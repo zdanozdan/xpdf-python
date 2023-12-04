@@ -108,7 +108,7 @@ class PdfLoader:
             filename, cliptext, discard_diag, discard_rotated_text, verbose, quiet, xpdf_mode, map_numeric_char_names, map_unknown_char_names, owner_password, user_password
         )
 
-    def extract_bytes(self) -> List[bytes]:
+    def extract_bytes(self,firstPage:int=1,lastPage:int=0) -> List[bytes]:
         """Extract encoded text from the pdf
 
         Returns
@@ -118,7 +118,7 @@ class PdfLoader:
         """
         pages: List[bytes] = []
         if self.capsule is not None:
-            pages = cXpdfPython.extractText(self.capsule)
+            pages = cXpdfPython.extractText(self.capsule,firstPage,lastPage)
 
         return pages
 
@@ -137,7 +137,7 @@ class PdfLoader:
 
         return pages
 
-    def extract_strings(self) -> List[str]:
+    def extract_strings(self,firstPage:int=1,lastPage:int=0) -> List[str]:
         """Extract and decode text from the pdf
 
         Returns
@@ -145,7 +145,7 @@ class PdfLoader:
         List[str]
             The text of each page, decoded as unicode
         """
-        pages = self.extract_bytes()
+        pages = self.extract_bytes(firsPage,lastPage)
         return [page for page in pages]
         #return [page.decode("unicode_escape", "replace") for page in pages]
 

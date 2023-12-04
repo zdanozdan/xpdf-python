@@ -106,7 +106,6 @@ PyObject *extractTextArea(PyObject *self, PyObject *args) {
     int marginl,marginr,margint,marginb;
     
     PyArg_ParseTuple(args, "Oiiii", &loaderCapsule, &marginl, &marginr, &margint, &marginb);
-    printf("margins: %d,%d,%d,%d",marginl,marginr,margint,marginb);
 
     PdfLoader *loader = (PdfLoader *)PyCapsule_GetPointer(loaderCapsule, "loaderPtr");
     vector<string> result = loader->extractTextArea(marginl,marginr,margint,marginb);
@@ -119,10 +118,11 @@ PyObject *extractText(PyObject *self, PyObject *args) {
     vector<string> res;
     
     PyObject *loaderCapsule;
-    PyArg_ParseTuple(args, "O", &loaderCapsule);
+    int firstPage,lastPage;
+    PyArg_ParseTuple(args, "Oii", &loaderCapsule,&firstPage,&lastPage);
 
     PdfLoader *loader = (PdfLoader *)PyCapsule_GetPointer(loaderCapsule, "loaderPtr");
-    vector<string> result = loader->extractText();
+    vector<string> result = loader->extractText(firstPage,lastPage);
     
     PyObject *converted = vectorStringToList(result);
     return Py_BuildValue("O", converted);
