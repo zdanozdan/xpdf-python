@@ -145,7 +145,7 @@ class PdfLoader:
         List[str]
             The text of each page, decoded as unicode
         """
-        pages = self.extract_bytes(firsPage,lastPage,fixedPitch)
+        pages = self.extract_bytes(firstPage,lastPage,fixedPitch)
         return [page for page in pages]
         #return [page.decode("unicode_escape", "replace") for page in pages]
 
